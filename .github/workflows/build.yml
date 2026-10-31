@@ -1,4 +1,4 @@
-
+   
 name: Compilar aplicación Android
 
 on:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Descargar proyecto
         uses: actions/checkout@v4
@@ -23,7 +23,9 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Instalar herramientas Android
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -31,8 +33,7 @@ jobs:
           gradle-version: '8.9'
 
       - name: Descomprimir proyecto
-        run: |
-          unzip -q Sorpresa_8_Meses_Proyecto_Android.zip -d proyecto
+        run: unzip -q Sorpresa_8_Meses_Proyecto_Android.zip -d proyecto
 
       - name: Compilar APK
         run: gradle -p proyecto assembleDebug
